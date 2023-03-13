@@ -9,7 +9,7 @@ android {
     buildToolsVersion = Dependencies.android.buildTools
 
     defaultConfig {
-        applicationId = "com.alacrity.template"
+        applicationId = "com.alacrity.thenotes"
         minSdk = Android.minSdk
         targetSdk = Android.targetSdk
         versionCode = 1
@@ -19,11 +19,7 @@ android {
     }
 
     buildTypes {
-        debug {
-            buildConfigField("String", "BASE_URL", "\"https://jsonplaceholder.typicode.com\"")
-        }
         release {
-            buildConfigField("String", "BASE_URL", "\"https://jsonplaceholder.typicode.com\"")
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),

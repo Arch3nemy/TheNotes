@@ -1,4 +1,8 @@
 <resources>
-    <string name="app_name">Template</string>
+    <string name="app_name">The Notes</string>
     <string name="new_note_button">New note button</string>
+    <string name="error_occured">Error occurred: %1s</string>
+    <string name="home_page">Home</string>
+    <string name="back_button">back_button</string>
+    <string name="edit_page">Edit Note</string>
 </resources>

@@ -10,11 +10,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import timber.log.Timber
 
 @Suppress("UNCHECKED_CAST")
-abstract class BaseViewModel<T : BaseEvent, V: BaseViewState>(defaultViewState: V) : ViewModel(), EventHandler<T> {
+abstract class BaseViewModel<T : BaseEvent, V : BaseViewState>(defaultViewState: V) : ViewModel(),
+    EventHandler<T> {
 
     protected val _viewState: MutableStateFlow<V> = MutableStateFlow(defaultViewState)
 
-    protected fun <T> launch(
+    fun <T> launch(
         dispatcher: CoroutineDispatcher = Dispatchers.IO,
         logError: String? = null,
         logSuccess: String? = null,

@@ -8,27 +8,25 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 private val LightThemeColors = lightColors(
-    primary = Blue600,
-    primaryVariant = Blue400,
+    primary = primaryLight,
+    primaryVariant = primaryLightVariant,
     onPrimary = Black2,
-    secondary = Color.White,
-    secondaryVariant = Teal300,
+    secondary = lightSecondary,
+    secondaryVariant = lightSecondaryVariant,
+    onSecondary = Black2,
     error = RedErrorDark,
-    onError = RedErrorLight,
-    background = Grey1,
-    onBackground = Color.Black,
-    surface = Color.White,
+    onError = RedErrorLight
 )
 
 private val DarkThemeColors = darkColors(
-    primary = Blue700,
-    primaryVariant = Color.White,
-    onPrimary = Color.White,
-    secondary = Black1,
+    primary = primaryDark,
+    primaryVariant = primaryDarkVariant,
+    onPrimary = White2,
+    secondary = darkSecondary,
+    secondaryVariant = darkSecondaryVariant,
+    onSecondary = White2,
     error = RedErrorLight,
-    background = Color.Black,
-    onBackground = Color.White,
-    surface = Black1,
+    onError = RedErrorLight
 )
 
 @Composable
@@ -39,7 +37,7 @@ fun AppTheme(
     MaterialTheme(
         colors = if (darkTheme) DarkThemeColors else LightThemeColors,
         typography = TheNotesTypography,
-        shapes = TemplateShapes,
+        shapes = TheNotesShapes,
         content = content
     )
 }

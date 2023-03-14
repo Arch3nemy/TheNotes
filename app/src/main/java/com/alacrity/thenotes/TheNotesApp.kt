@@ -5,12 +5,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
 import com.alacrity.thenotes.theme.AppTheme
-import com.alacrity.thenotes.ui.main.MainViewModel
+import com.alacrity.thenotes.ui.edit.EditViewModel
+import com.alacrity.thenotes.ui.home.HomeViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
 fun TheNotesApp(
-    homeViewModel: MainViewModel
+    homeViewModel: HomeViewModel,
+    editViewModel: EditViewModel
 ) {
     AppTheme {
             val systemUiController = rememberSystemUiController()
@@ -21,6 +23,7 @@ fun TheNotesApp(
 
             AppNavGraph(
                 homeViewModel = homeViewModel,
+                editViewModel = editViewModel
             )
         }
 

@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TheNotesApp">
         <activity
-            android:name="com.alacrity.thenotes.ui.main.MainActivity"
+            android:name="com.alacrity.thenotes.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

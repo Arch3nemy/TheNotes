@@ -1,10 +1,8 @@
 package com.alacrity.thenotes.entity
 
-import java.util.Date
-
 data class Note(
-    val id: Int,
+    val id: String,
     val title: String,
     val description: String,
-    val date: Date
+    val date: String
 )

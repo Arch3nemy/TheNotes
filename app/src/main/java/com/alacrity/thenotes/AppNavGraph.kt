@@ -2,25 +2,28 @@ package com.alacrity.thenotes
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.alacrity.thenotes.Destinations.HOME_ROUTE
-import com.alacrity.thenotes.Destinations.SECOND_SCREEN
-import com.alacrity.thenotes.ui.main.MainScreen
-import com.alacrity.thenotes.ui.main.MainViewModel
+import com.alacrity.thenotes.Destinations.EDIT_SCREEN_ROUTE
+import com.alacrity.thenotes.room.NoteTableItem
+import com.alacrity.thenotes.ui.edit.EditViewModel
+import com.alacrity.thenotes.ui.edit.MainEditScreen
+import com.alacrity.thenotes.ui.home.MainHomeScreen
+import com.alacrity.thenotes.ui.home.HomeViewModel
 
 object Destinations {
     const val HOME_ROUTE = "home"
-    const val SECOND_SCREEN = "details"
-    const val THIRD_SCREEN = "details_v2"
+    const val EDIT_SCREEN_ROUTE = "edit"
 }
+
+const val NOTE_ARG_KEY = "arg_key"
 
 @Composable
 fun AppNavGraph(
-    homeViewModel: MainViewModel,
+    homeViewModel: HomeViewModel,
+    editViewModel: EditViewModel,
     navController: NavHostController = rememberNavController(),
     startDestination: String = HOME_ROUTE,
 ) {
@@ -30,29 +33,23 @@ fun AppNavGraph(
     ) {
 
         composable(HOME_ROUTE) {
-            MainScreen(
+            MainHomeScreen(
                 viewModel = homeViewModel,
+                navController = navController
             )
         }
 
-        composable(
-            "${SECOND_SCREEN}/{sId}",
-            arguments = listOf(navArgument("sId") {
-                type = NavType.StringType
-            })
-        ) {
-            SecondScreen(homeViewModel, it.arguments?.getString("tId") ?: "")
-        }
+        composable(EDIT_SCREEN_ROUTE) {
+            val note = navController.previousBackStackEntry
+                ?.savedStateHandle
+                ?.get<NoteTableItem>(key = NOTE_ARG_KEY)
 
+            MainEditScreen(
+                viewModel = editViewModel,
+                note = note,
+                navController = navController,
+            )
+        }
 
     }
 }
-
-@Composable
-fun SecondScreen(viewModel: MainViewModel, arg: String) {
-
-}
-
-/**
- * navHostController.navigate("userPage?apiResponse=${Uri.encode(gson.toJson(apiResponse))}")
- */

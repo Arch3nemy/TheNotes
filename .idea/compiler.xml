@@ -13,6 +13,11 @@
       <module name="Template.buildSrc.main" target="11" />
       <module name="Template.buildSrc.test" target="11" />
       <module name="Template.data" target="11" />
+      <module name="TheNotes.app" target="11" />
+      <module name="TheNotes.buildSrc" target="11" />
+      <module name="TheNotes.buildSrc.main" target="11" />
+      <module name="TheNotes.buildSrc.test" target="11" />
+      <module name="TheNotes.data" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>

@@ -1,7 +1,7 @@
 package com.alacrity.thenotes.di
 
 import com.alacrity.thenotes.App
-import com.alacrity.thenotes.ui.main.MainActivity
+import com.alacrity.thenotes.MainActivity
 import dagger.Component
 import javax.inject.Singleton
 

@@ -1,22 +1,28 @@
-package com.alacrity.thenotes.ui.main
+package com.alacrity.thenotes
 
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import com.alacrity.thenotes.App
-import com.alacrity.thenotes.TheNotesApp
+import com.alacrity.thenotes.ui.edit.EditViewModel
+import com.alacrity.thenotes.ui.home.HomeViewModel
 import javax.inject.Inject
 
 class MainActivity: AppCompatActivity() {
 
     @Inject
-    lateinit var mainViewModel: MainViewModel
+    lateinit var homeViewModel: HomeViewModel
+
+    @Inject
+    lateinit var editViewModel: EditViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         App.appComponent.inject(this)
         setContent {
-            TheNotesApp(homeViewModel = mainViewModel)
+            TheNotesApp(
+                homeViewModel = homeViewModel,
+                editViewModel = editViewModel
+            )
         }
     }
 

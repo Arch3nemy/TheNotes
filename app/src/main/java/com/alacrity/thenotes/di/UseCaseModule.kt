@@ -22,6 +22,9 @@ interface UseCaseModule {
     @Binds
     fun bindSaveNoteToDatabaseUseCase(impl: SaveNoteToDatabaseUseCaseImpl): SaveNoteToDatabaseUseCase
 
+    @Binds
+    fun bindUpdateNoteUseCase(impl: UpdateNoteUseCaseImpl): UpdateNoteUseCase
+
 
 
 }

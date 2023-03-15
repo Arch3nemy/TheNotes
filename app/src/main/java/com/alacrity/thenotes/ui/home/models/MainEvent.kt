@@ -12,6 +12,8 @@ sealed class MainEvent : BaseEvent {
 
     data class RemoveNote(val note: Note) : MainEvent()
 
+    data class UpdateNote(val note: Note) : MainEvent()
+
 }
 
 fun HomeViewModel.enterScreen() {
@@ -24,4 +26,8 @@ fun HomeViewModel.createBlankNote() {
 
 fun HomeViewModel.removeNote(note: Note) {
     obtainEvent(MainEvent.RemoveNote(note))
+}
+
+fun HomeViewModel.updateNote(note: Note) {
+    obtainEvent(MainEvent.UpdateNote(note))
 }

@@ -32,4 +32,6 @@ class AppModule(private val context: Context) {
     @Provides
     fun provideDao(db: AppDatabase) = db.notesDao()
 
+
+
 }

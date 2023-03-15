@@ -31,6 +31,8 @@ class RepositoryImpl @Inject constructor(
 
     override suspend fun saveNoteToDatabase(note: Note) = db.notesDao().insert(note.toNoteTableItem())
 
+    override suspend fun updateNote(note: Note) = db.notesDao().update(note.toNoteTableItem())
+
     private fun generateStabbedData(): List<Note> {
         val date = Date()
         val secondDate = Date.from(date.toInstant().minus(1, ChronoUnit.DAYS))
@@ -52,7 +54,7 @@ class RepositoryImpl @Inject constructor(
     }
 
     companion object {
-        const val REQUEST_DELAY = 5000L
+        const val REQUEST_DELAY = 1000L
     }
 
 }

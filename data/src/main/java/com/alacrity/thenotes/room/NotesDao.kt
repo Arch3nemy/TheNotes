@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 
 @Dao
 interface NotesDao {
@@ -19,5 +20,8 @@ interface NotesDao {
 
         @Insert
         fun insert(note: NoteTableItem)
+
+        @Update
+        fun update(note: NoteTableItem)
 
 }

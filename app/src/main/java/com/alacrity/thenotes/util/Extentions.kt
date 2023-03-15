@@ -22,3 +22,8 @@ fun <T : BaseEvent, V : BaseViewState> BaseViewModel<T, V>.createBlankNote(block
         block.invoke(note)
     }
 }
+
+fun generateCurrentDate(): String {
+    val hoursAndMinutesFormat = SimpleDateFormat("hh:mm", Locale.getDefault())
+    return hoursAndMinutesFormat.format(Date())
+}

@@ -1,14 +1,9 @@
 package com.alacrity.thenotes.ui.home
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import com.alacrity.thenotes.Destinations.EDIT_SCREEN_ROUTE
 import com.alacrity.thenotes.NOTE_ARG_KEY
@@ -17,16 +12,21 @@ import com.alacrity.thenotes.ui.home.screens.HomeScreen
 import com.alacrity.thenotes.ui.home.models.createBlankNote
 import com.alacrity.thenotes.ui.home.models.enterScreen
 import com.alacrity.thenotes.ui.home.models.removeNote
+import com.alacrity.thenotes.ui.home.models.updateNote
 import com.alacrity.thenotes.ui.home.screens.ErrorScreen
 import com.alacrity.thenotes.ui.home.screens.LoadingScreen
+import com.alacrity.thenotes.ui.home.screens.NoItemsScreen
 import com.alacrity.thenotes.utils.toNoteTableItem
 import com.alacrity.thenotes.view_states.HomeViewState
 
 @Composable
 fun MainHomeScreen(
     viewModel: HomeViewModel,
+    updatedNote: Note?,
     navController: NavController
 ) {
+
+    if(updatedNote != null) viewModel.updateNote(updatedNote)
 
     val state by viewModel.viewState.collectAsState()
     val notes by viewModel.notesFlow.collectAsState(initial = emptyList())
@@ -44,6 +44,9 @@ fun MainHomeScreen(
         }
         is HomeViewState.Error -> {
             ErrorScreen(exception = (state as HomeViewState.Error).exception)
+        }
+        is HomeViewState.NoItems -> {
+            NoItemsScreen()
         }
         else -> Unit
     }

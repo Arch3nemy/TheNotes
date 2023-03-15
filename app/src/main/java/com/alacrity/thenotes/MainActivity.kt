@@ -5,9 +5,11 @@ import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import com.alacrity.thenotes.ui.edit.EditViewModel
 import com.alacrity.thenotes.ui.home.HomeViewModel
+import com.alacrity.thenotes.util.WorkScheduler
 import javax.inject.Inject
 
-class MainActivity: AppCompatActivity() {
+
+class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var homeViewModel: HomeViewModel
@@ -24,6 +26,8 @@ class MainActivity: AppCompatActivity() {
                 editViewModel = editViewModel
             )
         }
+        WorkScheduler().initUpdateDatesWork(this)
     }
 
 }
+

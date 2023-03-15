@@ -5,6 +5,7 @@ import com.alacrity.thenotes.ui.home.models.MainEvent
 import com.alacrity.thenotes.use_cases.*
 import com.alacrity.thenotes.util.BaseViewModel
 import com.alacrity.thenotes.util.createBlankNote
+import com.alacrity.thenotes.utils.getUpdatedNoteDayMonthAndYear
 import com.alacrity.thenotes.view_states.HomeViewState
 import com.alacrity.thenotes.view_states.HomeViewState.*
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -32,13 +33,14 @@ class HomeViewModel @Inject constructor(
             is Loading -> currentState.reduce(event)
             is Error -> currentState.reduce(event)
             is FinishedLoading -> currentState.reduce(event)
+            is NoItems -> currentState.reduce(event)
         }
     }
 
     private fun Loading.reduce(event: MainEvent) {
         logReduce(event)
         when (event) {
-            MainEvent.EnterScreen -> {
+            is MainEvent.EnterScreen -> {
                 loadNotesFromDatabase()
             }
             else -> Unit
@@ -47,7 +49,10 @@ class HomeViewModel @Inject constructor(
 
     private fun Error.reduce(event: MainEvent) {
         logReduce(event)
+    }
 
+    private fun NoItems.reduce(event: MainEvent) {
+        logReduce(event)
     }
 
     private fun FinishedLoading.reduce(event: MainEvent) {
@@ -59,6 +64,10 @@ class HomeViewModel @Inject constructor(
             is MainEvent.RemoveNote -> {
                 removeNote(event.note)
             }
+            is MainEvent.UpdateNote -> {
+                updateNote(event.note)
+            }
+
             else -> Unit
         }
     }
@@ -94,7 +103,10 @@ class HomeViewModel @Inject constructor(
             logError = "Error getting notes from server",
             logSuccess = "Successfully received notes from server",
             onSuccess = { notes ->
-                onObtainNotes(notes, true)
+                if (notes.isEmpty()) {
+                    _viewState.value = NoItems
+                } else
+                    onObtainNotes(notes, true)
             },
             onFailure = {
                 _viewState.value = Error(it)
@@ -152,7 +164,34 @@ class HomeViewModel @Inject constructor(
 
             saveNoteToDatabaseUseCase(note)
         }
-
     }
 
+    private fun updateNote(note: Note) {
+        launch {
+            val notes = _notesFlow.firstOrNull()?.toMutableList()
+            notes?.apply {
+                notes.replaceAll { if (it.id == note.id) note else it }
+                _notesFlow.emit(this)
+            }
+
+            saveNoteToDatabaseUseCase(note)
+        }
+    }
+
+    fun updateDates() {
+        launch {
+            val notes = _notesFlow.firstOrNull()?.toMutableList()
+            notes?.apply {
+                notes.replaceAll { note ->
+                    if (note.date.length < 6) note.copy(date = getUpdatedNoteDayMonthAndYear())
+                    else note
+                }
+                _notesFlow.emit(this)
+            }
+
+            notes?.let {
+                saveNotesToDatabaseUseCase(it)
+            }
+        }
+    }
 }

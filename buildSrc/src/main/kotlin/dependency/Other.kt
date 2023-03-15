@@ -24,18 +24,6 @@ object Other {
 
     const val material = "com.google.android.material:material:${Versions.material}"
 
-    const val okHttp = "com.squareup.okhttp3:okhttp:${Versions.okHttp}"
-
-    const val klaxon = "com.beust:klaxon:${Versions.klaxon}"
-
-    const val moshi = "com.squareup.moshi:moshi:${Versions.moshi}"
-
-    const val moshiKotlin = "com.squareup.moshi:moshi-kotlin:${Versions.moshi}"
-
-    const val moshiConverter = "com.squareup.retrofit2:converter-moshi:${Versions.moshiConverter}"
-
-    const val moshiCodGen = "com.squareup.moshi:moshi-kotlin-codegen:${Versions.moshiCodGen}"
-
-
+    const val worker = "androidx.work:work-runtime:${Versions.worker}"
 
 }

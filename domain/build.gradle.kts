@@ -12,7 +12,6 @@ dependencies {
     core()
     di()
     async()
-    retrofit()
 }
 
 fun DependencyHandlerScope.core() {
@@ -26,10 +25,3 @@ fun DependencyHandlerScope.di() {
 fun DependencyHandlerScope.async() {
     implementation(Dependencies.async.coroutinesCore)
 }
-
-fun DependencyHandlerScope.retrofit() {
-    implementation(Dependencies.retrofit.retrofit)
-    implementation(Dependencies.retrofit.gson)
-    implementation(Dependencies.other.moshi)
-}
-

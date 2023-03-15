@@ -54,8 +54,8 @@ dependencies {
     log()
     room()
     async()
+    worker()
     jetpack()
-    retrofit()
     imageLoading()
 }
 
@@ -105,13 +105,6 @@ fun DependencyHandlerScope.jetpack() {
     implementation(Dependencies.compose.uiController)
 }
 
-fun DependencyHandlerScope.retrofit() {
-    implementation(Dependencies.retrofit.retrofit)
-    implementation(Dependencies.retrofit.gson)
-    implementation(Dependencies.retrofit.gsonConverter)
-    implementation(Dependencies.other.moshi)
-    implementation(Dependencies.other.moshiConverter)
-    implementation(Dependencies.other.moshiKotlin)
-    kapt(Dependencies.other.moshiCodGen)
+fun DependencyHandlerScope.worker() {
+    implementation(Dependencies.other.worker)
 }
-

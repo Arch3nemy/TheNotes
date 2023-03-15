@@ -36,17 +36,11 @@ android {
 dependencies {
     implementation(project(":domain"))
     implementation("androidx.core:core-ktx:1.9.0")
-    retrofit()
-    klaxon()
-    moshi()
+    di()
     room()
+    worker()
 }
 
-fun DependencyHandlerScope.retrofit() {
-    implementation(Dependencies.retrofit.retrofit)
-    implementation(Dependencies.retrofit.gson)
-    implementation(Dependencies.retrofit.gsonConverter)
-}
 
 fun DependencyHandlerScope.room() {
     implementation(Dependencies.room.runtime)
@@ -54,12 +48,12 @@ fun DependencyHandlerScope.room() {
     implementation(Dependencies.room.ktx)
 }
 
-fun DependencyHandlerScope.klaxon() {
-    implementation(Dependencies.other.klaxon)
-    implementation(Dependencies.other.timber)
+fun DependencyHandlerScope.worker() {
+    implementation(Dependencies.other.worker)
 }
 
-fun DependencyHandlerScope.moshi() {
-    implementation(Dependencies.other.moshi)
+fun DependencyHandlerScope.di() {
+    implementation(Dependencies.di.dagger2)
+    kapt(Dependencies.di.dagger2compiler)
 }
 

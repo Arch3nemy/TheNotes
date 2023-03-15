@@ -17,8 +17,5 @@ val primaryDarkVariant = Color(0xFF00001a)
 val darkSecondary = Color(0xFF402810)
 val darkSecondaryVariant = Color(0xFF200000)
 
-val GradientColor1 = Color(0xFF0E1956)
-val GradientColor2 = Color(0xFF092474)
-val GradientColor3 = Color(0xFF0170B6)
-val GradientColor4 = Color(0xFF19FAFF)
-val GradientColor5 = Color(0xFF9CC9BB)
+val ToolbarColor = Color(0xFF0170B6)
+

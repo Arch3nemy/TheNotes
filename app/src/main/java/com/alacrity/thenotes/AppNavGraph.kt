@@ -12,6 +12,7 @@ import com.alacrity.thenotes.ui.edit.EditViewModel
 import com.alacrity.thenotes.ui.edit.MainEditScreen
 import com.alacrity.thenotes.ui.home.MainHomeScreen
 import com.alacrity.thenotes.ui.home.HomeViewModel
+import com.alacrity.thenotes.utils.toNote
 
 object Destinations {
     const val HOME_ROUTE = "home"
@@ -19,6 +20,7 @@ object Destinations {
 }
 
 const val NOTE_ARG_KEY = "arg_key"
+const val NEW_NOTE_ARG_KEY = "new_arg_key"
 
 @Composable
 fun AppNavGraph(
@@ -33,8 +35,13 @@ fun AppNavGraph(
     ) {
 
         composable(HOME_ROUTE) {
+            val note = navController.previousBackStackEntry
+                ?.savedStateHandle
+                ?.get<NoteTableItem>(key = NEW_NOTE_ARG_KEY)
+
             MainHomeScreen(
                 viewModel = homeViewModel,
+                updatedNote = note?.toNote(),
                 navController = navController
             )
         }

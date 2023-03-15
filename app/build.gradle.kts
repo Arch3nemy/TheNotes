@@ -49,6 +49,7 @@ android {
 dependencies {
     implementation(project(":domain"))
     implementation(project(":data"))
+    implementation("androidx.work:work-runtime-ktx:2.8.0")
     core()
     di()
     log()

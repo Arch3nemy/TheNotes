@@ -5,19 +5,20 @@ import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
-import com.alacrity.thenotes.util.workers.HelloWorldWorker
+import com.alacrity.thenotes.util.workers.UpdateNotesWorker
 import java.util.*
 import java.util.concurrent.TimeUnit
 
 class WorkScheduler {
 
-    private val hourOfTheDay = 24
+    //Midnight
+    private val hourOfTheDay = 0
 
     private val myConstraints: Constraints =
-        Constraints.Builder().setRequiresStorageNotLow(true).build();
+        Constraints.Builder().setRequiresStorageNotLow(true).build()
 
     private val workRequest = PeriodicWorkRequest.Builder(
-        HelloWorldWorker::class.java,
+        UpdateNotesWorker::class.java,
         1L, TimeUnit.DAYS,
         calculateFlex(), TimeUnit.MILLISECONDS
     )
@@ -28,7 +29,7 @@ class WorkScheduler {
     fun initUpdateDatesWork(context: Context) {
         WorkManager.getInstance(context).enqueueUniquePeriodicWork(
             UPDATE_DATES_WORKER_TAG,
-            ExistingPeriodicWorkPolicy.REPLACE,
+            ExistingPeriodicWorkPolicy.UPDATE,
             workRequest
         )
     }

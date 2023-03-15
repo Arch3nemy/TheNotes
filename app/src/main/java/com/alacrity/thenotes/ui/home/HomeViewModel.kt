@@ -5,7 +5,6 @@ import com.alacrity.thenotes.ui.home.models.MainEvent
 import com.alacrity.thenotes.use_cases.*
 import com.alacrity.thenotes.util.BaseViewModel
 import com.alacrity.thenotes.util.createBlankNote
-import com.alacrity.thenotes.utils.getUpdatedNoteDayMonthAndYear
 import com.alacrity.thenotes.view_states.HomeViewState
 import com.alacrity.thenotes.view_states.HomeViewState.*
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -19,7 +18,7 @@ class HomeViewModel @Inject constructor(
     private val saveNotesToDatabaseUseCase: SaveNotesToDatabaseUseCase,
     private val getNotesFromDatabaseUseCase: GetNotesFromDatabaseUseCase,
     private val removeNoteFromDatabaseUseCase: RemoveNoteFromDatabaseUseCase,
-    private val saveNoteToDatabaseUseCase: SaveNoteToDatabaseUseCase,
+    private val saveNoteToDatabaseUseCase: SaveNoteToDatabaseUseCase
 ) : BaseViewModel<MainEvent, HomeViewState>(Loading) {
 
     val viewState: StateFlow<HomeViewState> = _viewState
@@ -175,23 +174,6 @@ class HomeViewModel @Inject constructor(
             }
 
             saveNoteToDatabaseUseCase(note)
-        }
-    }
-
-    fun updateDates() {
-        launch {
-            val notes = _notesFlow.firstOrNull()?.toMutableList()
-            notes?.apply {
-                notes.replaceAll { note ->
-                    if (note.date.length < 6) note.copy(date = getUpdatedNoteDayMonthAndYear())
-                    else note
-                }
-                _notesFlow.emit(this)
-            }
-
-            notes?.let {
-                saveNotesToDatabaseUseCase(it)
-            }
         }
     }
 }

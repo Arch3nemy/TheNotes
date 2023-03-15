@@ -2,13 +2,12 @@ package com.alacrity.thenotes.util.workers
 
 import android.content.Context
 import androidx.work.ListenableWorker
-import androidx.work.WorkManager
 import androidx.work.WorkerFactory
 import androidx.work.WorkerParameters
 import javax.inject.Inject
 
 class SampleWorkerFactory @Inject constructor(
-    private val helloWorldWorkerFactory: HelloWorldWorker.Factory,
+    private val updateNotesWorkerFactory: UpdateNotesWorker.Factory,
 ) : WorkerFactory() {
 
     override fun createWorker(
@@ -17,8 +16,8 @@ class SampleWorkerFactory @Inject constructor(
         workerParameters: WorkerParameters,
     ): ListenableWorker? {
         return when (workerClassName) {
-            HelloWorldWorker::class.java.name ->
-                helloWorldWorkerFactory.create(appContext, workerParameters)
+            UpdateNotesWorker::class.java.name ->
+                updateNotesWorkerFactory.create(appContext, workerParameters)
             else -> null
         }
     }

@@ -23,7 +23,8 @@ fun dateToProperString(date: Date): String {
  */
 fun getUpdatedNoteDayMonthAndYear(): String {
     val daysMonthAndYearFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
-    return daysMonthAndYearFormat.format(Date().toInstant().minusMillis(3600000))
+    val date: Date = Date.from(Date().toInstant().minusMillis(3600000))
+    return daysMonthAndYearFormat.format(date)
 }
 
 private fun getCurrentDayOfMonth(): Int {

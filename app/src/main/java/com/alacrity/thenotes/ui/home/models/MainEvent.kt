@@ -3,12 +3,15 @@ package com.alacrity.thenotes.ui.home.models
 import com.alacrity.thenotes.BaseEvent
 import com.alacrity.thenotes.entity.Note
 import com.alacrity.thenotes.ui.home.HomeViewModel
+import com.alacrity.thenotes.util.internet.ConnectivityObserver
 
 sealed class MainEvent : BaseEvent {
 
-    object EnterScreen : MainEvent()
-
     object CreateBlankNote : MainEvent()
+
+    object NetworkAvailable : MainEvent()
+
+    data class EnterScreen(val networkStatus: ConnectivityObserver.Status) : MainEvent()
 
     data class RemoveNote(val note: Note) : MainEvent()
 
@@ -16,8 +19,8 @@ sealed class MainEvent : BaseEvent {
 
 }
 
-fun HomeViewModel.enterScreen() {
-    obtainEvent(MainEvent.EnterScreen)
+fun HomeViewModel.enterScreen(networkStatus: ConnectivityObserver.Status) {
+    obtainEvent(MainEvent.EnterScreen(networkStatus))
 }
 
 fun HomeViewModel.createBlankNote() {
@@ -30,4 +33,7 @@ fun HomeViewModel.removeNote(note: Note) {
 
 fun HomeViewModel.updateNote(note: Note) {
     obtainEvent(MainEvent.UpdateNote(note))
+}
+fun HomeViewModel.onNetworkAvailable() {
+    obtainEvent(MainEvent.NetworkAvailable)
 }

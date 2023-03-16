@@ -8,14 +8,9 @@ import androidx.navigation.NavController
 import com.alacrity.thenotes.Destinations.EDIT_SCREEN_ROUTE
 import com.alacrity.thenotes.NOTE_ARG_KEY
 import com.alacrity.thenotes.entity.Note
-import com.alacrity.thenotes.ui.home.screens.HomeScreen
-import com.alacrity.thenotes.ui.home.models.createBlankNote
-import com.alacrity.thenotes.ui.home.models.enterScreen
-import com.alacrity.thenotes.ui.home.models.removeNote
-import com.alacrity.thenotes.ui.home.models.updateNote
-import com.alacrity.thenotes.ui.home.screens.ErrorScreen
-import com.alacrity.thenotes.ui.home.screens.LoadingScreen
-import com.alacrity.thenotes.ui.home.screens.NoItemsScreen
+import com.alacrity.thenotes.ui.home.models.*
+import com.alacrity.thenotes.ui.home.screens.*
+import com.alacrity.thenotes.util.internet.ConnectivityObserver
 import com.alacrity.thenotes.utils.toNoteTableItem
 import com.alacrity.thenotes.view_states.HomeViewState
 
@@ -23,21 +18,23 @@ import com.alacrity.thenotes.view_states.HomeViewState
 fun MainHomeScreen(
     viewModel: HomeViewModel,
     updatedNote: Note?,
-    navController: NavController
+    navController: NavController,
+    networkStatus: ConnectivityObserver.Status
 ) {
 
-    if(updatedNote != null) viewModel.updateNote(updatedNote)
+    if (updatedNote != null) viewModel.updateNote(updatedNote)
 
     val state by viewModel.viewState.collectAsState()
     val notes by viewModel.notesFlow.collectAsState(initial = emptyList())
 
     when (state) {
         HomeViewState.Loading -> {
-          LoadingScreen()
+            LoadingScreen()
         }
         is HomeViewState.FinishedLoading -> {
             HomeScreen(
                 notesList = notes,
+                isNetworkAvailable = (state as HomeViewState.FinishedLoading).isNetworkAvailable,
                 onFabClick = { viewModel.createBlankNote() },
                 onRemoveNote = { note -> viewModel.removeNote(note) }
             ) { note -> navController.navigateToEditScreen(note) }
@@ -48,11 +45,16 @@ fun MainHomeScreen(
         is HomeViewState.NoItems -> {
             NoItemsScreen()
         }
-        else -> Unit
+        is HomeViewState.WaitingForInternet -> {
+            WaitingForInternetScreen(
+                networkStatus = networkStatus,
+                onNetworkBecomeAvailable = { viewModel.onNetworkAvailable() }
+            )
+        }
     }
 
     LaunchedEffect(key1 = state, block = {
-        viewModel.enterScreen()
+        viewModel.enterScreen(networkStatus)
     })
 
 }

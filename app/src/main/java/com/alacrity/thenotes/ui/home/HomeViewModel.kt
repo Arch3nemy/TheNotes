@@ -5,6 +5,7 @@ import com.alacrity.thenotes.ui.home.models.MainEvent
 import com.alacrity.thenotes.use_cases.*
 import com.alacrity.thenotes.util.BaseViewModel
 import com.alacrity.thenotes.util.createBlankNote
+import com.alacrity.thenotes.util.internet.ConnectivityObserver.Status.*
 import com.alacrity.thenotes.view_states.HomeViewState
 import com.alacrity.thenotes.view_states.HomeViewState.*
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -33,6 +34,7 @@ class HomeViewModel @Inject constructor(
             is Error -> currentState.reduce(event)
             is FinishedLoading -> currentState.reduce(event)
             is NoItems -> currentState.reduce(event)
+            is WaitingForInternet -> currentState.reduce(event)
         }
     }
 
@@ -40,7 +42,9 @@ class HomeViewModel @Inject constructor(
         logReduce(event)
         when (event) {
             is MainEvent.EnterScreen -> {
-                loadNotesFromDatabase()
+                val isNetworkAvailable = event.networkStatus == Available
+                // Loads notes from database or from server if database is empty and network is available
+                loadNotes(isNetworkAvailable)
             }
             else -> Unit
         }
@@ -71,6 +75,16 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    private fun WaitingForInternet.reduce(event: MainEvent) {
+        logReduce(event)
+        when (event) {
+            is MainEvent.NetworkAvailable -> {
+                loadNotes(networkAvailable = true)
+            }
+            else -> Unit
+        }
+    }
+
     /**
      * If database is empty, we load data from server. If we load data from server while we have data in database it's
      * unclear what we should display to user. Consequently, For test purposes we load data from server
@@ -79,15 +93,25 @@ class HomeViewModel @Inject constructor(
      * Thus far, if we load data from server, the user will see server data instead of database one.
      * The problem could be solved by uploading data to server, which can not be done in this case.
      */
-    private fun loadNotesFromDatabase() {
+    private fun loadNotes(networkAvailable: Boolean) {
         launch(
             logError = "Error getting notes from database",
             logSuccess = "Successfully received notes from database",
             onSuccess = { notes ->
                 if (notes.isEmpty()) {
-                    loadNotesFromServer()
-                } else
-                    onObtainNotes(notes, false)
+                    if (networkAvailable) {
+                        loadNotesFromServer()
+                    } else {
+                        // First launch(database is empty and internet is not available)
+                        _viewState.value = WaitingForInternet
+                    }
+                } else {
+                    onObtainNotes(
+                        notesList = notes,
+                        isNetworkAvailable = networkAvailable,
+                        saveToDatabase = false
+                    )
+                }
             },
             onFailure = {
                 _viewState.value = Error(it)
@@ -105,7 +129,11 @@ class HomeViewModel @Inject constructor(
                 if (notes.isEmpty()) {
                     _viewState.value = NoItems
                 } else
-                    onObtainNotes(notes, true)
+                    onObtainNotes(
+                        notesList = notes,
+                        isNetworkAvailable = true,
+                        saveToDatabase = true
+                    )
             },
             onFailure = {
                 _viewState.value = Error(it)
@@ -119,14 +147,18 @@ class HomeViewModel @Inject constructor(
     /**
      * Puts the notes to notes flow and saves to the database if needed
      */
-    private fun onObtainNotes(notesList: List<Note>, saveToDatabase: Boolean) {
+    private fun onObtainNotes(
+        notesList: List<Note>,
+        isNetworkAvailable: Boolean,
+        saveToDatabase: Boolean
+    ) {
         launch(
             onFailure = {
                 _viewState.value = Error(it)
             }) {
             if (saveToDatabase) saveNotesToDatabaseUseCase(notesList)
             _notesFlow.emit(notesList)
-            _viewState.value = FinishedLoading(notesList)
+            _viewState.value = FinishedLoading(notesList, isNetworkAvailable)
         }
     }
 

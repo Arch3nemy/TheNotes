@@ -1,11 +1,10 @@
-package com.alacrity.thenotes.util
+package com.alacrity.thenotes.util.workers
 
 import android.content.Context
 import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
-import com.alacrity.thenotes.util.workers.UpdateNotesWorker
 import java.util.*
 import java.util.concurrent.TimeUnit
 

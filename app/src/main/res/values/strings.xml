@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">The Notes</string>
     <string name="new_note_button">New note button</string>
-    <string name="error_occured">Error occurred: %1s</string>
+    <string name="error_occurred">Error occurred: %1s</string>
     <string name="home_page">Home</string>
     <string name="back_button">back_button</string>
     <string name="edit_page">Edit Note</string>
@@ -9,4 +9,6 @@
     <string name="desc_goes_here">Description goes here</string>
     <string name="title_goes_here">Title goes here</string>
     <string name="save">Save</string>
+    <string name="network_status">Network status: %1s</string>
+    <string name="network_is_not_available">Network is not available</string>
 </resources>

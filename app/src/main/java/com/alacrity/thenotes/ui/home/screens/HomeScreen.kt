@@ -9,9 +9,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -22,14 +20,29 @@ import com.alacrity.thenotes.R
 import com.alacrity.thenotes.entity.Note
 import com.alacrity.thenotes.theme.ToolbarColor
 import com.alacrity.thenotes.theme.primaryLight
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
-fun HomeScreen(notesList: List<Note>, onFabClick: () -> Unit, onRemoveNote: (Note) -> Unit, onNoteClick: (Note) -> Unit) {
+fun HomeScreen(
+    notesList: List<Note>,
+    isNetworkAvailable: Boolean,
+    onFabClick: () -> Unit,
+    onRemoveNote: (Note) -> Unit,
+    onNoteClick: (Note) -> Unit
+) {
     Scaffold(
         topBar = { TopAppBar() },
         floatingActionButtonPosition = FabPosition.End,
         floatingActionButton = { FloatingActionButton(onFabClick = onFabClick) },
-        content = { paddingValues -> Screen(paddingValues, notesList, onRemoveNote) { onNoteClick(it) } })
+        content = { paddingValues ->
+            Screen(
+                paddingValues,
+                isNetworkAvailable,
+                notesList,
+                onRemoveNote
+            ) { onNoteClick(it) }
+        })
 }
 
 @Composable
@@ -44,8 +57,20 @@ fun FloatingActionButton(modifier: Modifier = Modifier, onFabClick: () -> Unit) 
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
-fun Screen(paddingValues: PaddingValues, notesList: List<Note>, onRemoveNote: (Note) -> Unit, onNoteClick: (Note) -> Unit) {
-    Box(modifier = Modifier.padding(paddingValues)) {
+fun Screen(
+    paddingValues: PaddingValues,
+    isNetworkAvailable: Boolean,
+    notesList: List<Note>,
+    onRemoveNote: (Note) -> Unit,
+    onNoteClick: (Note) -> Unit
+) {
+    var snackbarVisibleState by remember { mutableStateOf(!isNetworkAvailable) }
+    val coroutineScope = rememberCoroutineScope()
+
+    Column(
+        modifier = Modifier.padding(paddingValues).fillMaxSize(),
+        verticalArrangement = Arrangement.SpaceBetween
+    ) {
         LazyColumn {
             items(
                 items = notesList,
@@ -91,7 +116,21 @@ fun Screen(paddingValues: PaddingValues, notesList: List<Note>, onRemoveNote: (N
                     )
                 })
         }
+        if (snackbarVisibleState) {
+            Snackbar(
+                modifier = Modifier.padding(8.dp)
+            ) { Text(text = stringResource(id = R.string.network_is_not_available)) }
+        }
     }
+
+
+    LaunchedEffect(key1 = paddingValues) {
+        coroutineScope.launch {
+            delay(3000)
+            snackbarVisibleState = false
+        }
+    }
+
 }
 
 @Composable

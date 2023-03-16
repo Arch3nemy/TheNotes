@@ -54,7 +54,7 @@ class RepositoryImpl @Inject constructor(
     }
 
     companion object {
-        const val REQUEST_DELAY = 1000L
+        const val REQUEST_DELAY = 5000L
     }
 
 }

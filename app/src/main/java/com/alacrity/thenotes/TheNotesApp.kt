@@ -7,12 +7,14 @@ import androidx.compose.ui.graphics.Color
 import com.alacrity.thenotes.theme.AppTheme
 import com.alacrity.thenotes.ui.edit.EditViewModel
 import com.alacrity.thenotes.ui.home.HomeViewModel
+import com.alacrity.thenotes.util.internet.ConnectivityObserver
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
 fun TheNotesApp(
     homeViewModel: HomeViewModel,
-    editViewModel: EditViewModel
+    editViewModel: EditViewModel,
+    networkStatus: ConnectivityObserver.Status
 ) {
     AppTheme {
             val systemUiController = rememberSystemUiController()
@@ -23,7 +25,8 @@ fun TheNotesApp(
 
             AppNavGraph(
                 homeViewModel = homeViewModel,
-                editViewModel = editViewModel
+                editViewModel = editViewModel,
+                networkStatus = networkStatus
             )
         }
 

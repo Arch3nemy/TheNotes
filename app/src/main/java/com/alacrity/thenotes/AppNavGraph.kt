@@ -12,6 +12,7 @@ import com.alacrity.thenotes.ui.edit.EditViewModel
 import com.alacrity.thenotes.ui.edit.MainEditScreen
 import com.alacrity.thenotes.ui.home.MainHomeScreen
 import com.alacrity.thenotes.ui.home.HomeViewModel
+import com.alacrity.thenotes.util.internet.ConnectivityObserver
 import com.alacrity.thenotes.utils.toNote
 
 object Destinations {
@@ -26,6 +27,7 @@ const val NEW_NOTE_ARG_KEY = "new_arg_key"
 fun AppNavGraph(
     homeViewModel: HomeViewModel,
     editViewModel: EditViewModel,
+    networkStatus: ConnectivityObserver.Status,
     navController: NavHostController = rememberNavController(),
     startDestination: String = HOME_ROUTE,
 ) {
@@ -42,7 +44,8 @@ fun AppNavGraph(
             MainHomeScreen(
                 viewModel = homeViewModel,
                 updatedNote = note?.toNote(),
-                navController = navController
+                navController = navController,
+                networkStatus = networkStatus
             )
         }
 
